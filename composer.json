@@ -1,0 +1,39 @@
+{
+    "name": "hyder/converter",
+    "description": "Convert a PDF to an image or convert an image to PDF",
+    "keywords": [
+        "pdf-to-image",
+        "image-to-pdf",
+        "pdf",
+        "image",
+        "converter",
+        "hyder",
+        "laravel"
+    ],
+    "authors": [
+        {
+            "name": "Tofayel Hyder Abhi",
+            "email": "tofayelhyder71@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "php": "^7.3|^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hyder\\Converter\\": "src"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Hyder\\Converter\\ConverterServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
