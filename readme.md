@@ -1,6 +1,6 @@
-## PDF to Image Converter
+## About Converter
 
-PDF to Image Converter is a PHP package that allows you to convert PDF files to images. The package uses Imagick PHP extension and GhostScript to convert PDF files to images.
+This is a Laravel package that allows you to convert PDF files to images. The package uses Imagick PHP extension and GhostScript to convert PDF files to images.
 
 ## Requirements
 
