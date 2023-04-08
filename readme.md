@@ -6,14 +6,14 @@ PDF to Image Converter is a PHP package that allows you to convert PDF files to 
 
 - PHP "^7.3|^8.0"
 - Imagick PHP extension
-  Enable the Imagick extension in your php.ini file by uncommenting or adding the following line:
+- Enable the Imagick extension in your php.ini file by uncommenting or adding the following line:
 
 ```text
 extension=imagick
 ```
 
 - Ghostscript
-  Verify that Ghostscript is installed by running the following command:
+- Verify that Ghostscript is installed by running the following command:
 
 ```bash
 gs -v
@@ -85,17 +85,17 @@ This method sets the path of the PDF file you want to convert to an image.
 
 This method sets the output format of the image. The supported formats are JPEG, JPG, and PNG.
 
-### resolution($dpi)
+### resolution(int $dpi)
 
 This method sets the resolution of the output image in dots per inch (dpi). The higher the resolution, the better the quality of the image, but also the larger the file size.
 
-### maxLimit($max)
+### maxLimit(int $max)
 
 This method sets a maximum limit for the number of pages to be converted. If the PDF file has more pages than this limit, only the first $max pages will be converted.
 
 ### setPage($pages)
 
-This method sets the pages of the PDF file that you want to convert. The pages can be specified as single page numbers (e.g. 1,2,3), a range of pages (e.g. 1-3), or a combination of both (e.g. 1,2,3-5).
+This method sets the pages of the PDF file that you want to convert. The pages can be specified as single page numbers (e.g. 1,2,3), a range of pages (e.g. 1-3), or a combination of both (e.g. 1,2,3-5). By default only first page will be converted.
 
 ### toDir(string $storageTo = '')
 

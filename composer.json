@@ -1,6 +1,6 @@
 {
     "name": "hyder/converter",
-    "description": "Convert a PDF to an image or convert an image to PDF",
+    "description": "PdfToImage is a PHP package that provides an easy-to-use interface to convert PDF files to images using the Imagick PHP extension.",
     "keywords": [
         "pdf-to-image",
         "image-to-pdf",
