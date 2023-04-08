@@ -5,15 +5,16 @@ namespace Hyder\Converter\Converters;
 use Hyder\Converter\Exception\InvalidFormat;
 use Hyder\Converter\Exception\PdfDoesNotExist;
 use Hyder\Converter\Exception\PageDoesNotExist;
+use Illuminate\Support\Facades\Config;
 use Imagick;
 
 class PdfToImageConverter
 {
     protected $pdfFile;
-
-    protected $resolution = 144;
-
-    protected $outputFormat = '';
+    
+    protected $resolution;
+    
+    protected $outputFormat = 'jpg';
 
     protected $page = 1;
 
@@ -25,6 +26,8 @@ class PdfToImageConverter
         if (!file_exists($pdfFile)) {
             throw new PdfDoesNotExist();
         }
+
+        $this->resolution = Config::get('converter.pdf_to_image.resolution') ?? 144;
 
         $this->pdfFile = $pdfFile;
     }

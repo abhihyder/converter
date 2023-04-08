@@ -8,46 +8,40 @@ use SplFileInfo;
 
 class PdfToImageService
 {
+    protected $outputFormat = 'jpg';
 
     private $totalPage = 1;
 
     private $pageNumber = [1];
 
-    private $format = '';
+    private $maxLimit = null;
+
+    private $toDirectory = '';
 
     private $tempFilePath = '';
 
     private PdfToImageConverter $pdf;
 
+    public function __construct()
+    {
+        $this->toDirectory = $this->makeDirectory(Config::get('converter.pdf_to_image.default_dir'));
+
+        $this->maxLimit = Config::get('converter.pdf_to_image.max_limit');
+    }
+
     public function path(string $path)
     {
         try {
 
-            // $file = new SplFileInfo($path);
-            // $file_type = $file->getExtension();
+            $this->makeTempFile($path);
 
-            // $this->tempFilePath = tempnam(sys_get_temp_dir(), $file_type);
-            // file_put_contents($this->tempFilePath, file_get_contents($path));
-            // $path = $this->tempFilePath;
+            $this->pdf = new PdfToImageConverter($this->tempFilePath);
 
-            // if the path is invalid ------------------------------
-            if (!file_exists($path)) {
-                return throw new \Exception("Invalid file path provided", 404);
-            }
-            $this->pdf = new PdfToImageConverter($path);
-
-            // Image format ------------------------------
-            $supportedFormats = $this->pdf->getValidOutputFormats();
-            $this->format = $supportedFormats[0];
-            
             // Count the number of pages ---------------------
             $this->totalPage = $this->pdf->getNumberOfPages();
-            return $this->totalPage;
 
             return $this;
         } catch (\Exception $ex) {
-            // unlink($this->tempFilePath);
-            return $ex->getMessage();
             return throw new \Exception($ex->getMessage());
         }
     }
@@ -55,7 +49,7 @@ class PdfToImageService
     public function format(string $format)
     {
         if (in_array($format, $this->pdf->getValidOutputFormats())) {
-            $this->format = $format;
+            $this->outputFormat = $format;
         } else {
             return throw new \Exception("Unsupported format!", 400);
         }
@@ -63,9 +57,16 @@ class PdfToImageService
         return $this;
     }
 
-    public function resolution(int $value)
+    public function maxLimit(int $max)
     {
-        $this->pdf->setResolution($value);
+        $this->maxLimit = $max;
+
+        return $this;
+    }
+
+    public function resolution(int $dpi)
+    {
+        $this->pdf->setResolution($dpi);
 
         return $this;
     }
@@ -79,14 +80,23 @@ class PdfToImageService
         }
     }
 
+    public function toDir(string $storageTo = '')
+    {
+        try {
+            $this->toDirectory = $this->makeDirectory($storageTo);
+            return $this;
+        } catch (\Exception $ex) {
+            return throw new \Exception($ex->getMessage());
+        }
+    }
 
-    public function save(string $storagePath = '')
+    public function save(string $name = '')
     {
         try {
 
-            $image_details = [];
-            $folderPath = Config::get('converter.pdf_to_image.storage_path');
-            $maxLimit = Config::get('converter.pdf_to_image.max_limit', null);
+            $outputDetails = [];
+            $folderPath = $this->toDirectory;
+
             foreach ($this->pageNumber as $key => $index) {
 
                 // If the index is empty --------------------
@@ -94,30 +104,58 @@ class PdfToImageService
                     continue;
                 }
 
-                $imageName = "page_" . $index . "_" . time() . "." . $this->format;
+                if (!empty($name)) {
+                    $imageName = $name . "." . $this->outputFormat;
+                    if (file_exists($folderPath . '/' . $imageName)) {
+                        $imageName = $name . "_" . time() . "." . $this->outputFormat;
+                    }
+                } else {
+                    $imageName = "page_" . $index . "_" . time() . "." . $this->outputFormat;
+                }
+
                 // Generate image url to store -----------------------------
-                $image_path = $folderPath . $imageName;
+                $image_path = $folderPath . '/' . $imageName;
 
                 // Generate image --------------------------------
                 $this->pdf->setPage($index)->saveImage($image_path);
 
                 // assign image to an array --------------------------------
-                $image_details[] = [
-                    'file_size_in_kb' => number_format(filesize($image_path) / 1024, 2),
+                $outputDetails[] = [
                     'file_dir' =>  $folderPath,
                     'file_name' => $imageName
                 ];
 
-                if ($maxLimit && $key === $maxLimit) {
+                if ($this->maxLimit && $key === $this->maxLimit) {
                     break;
                 }
             }
             unlink($this->tempFilePath);
             // Success response with image details --------------------
-            return $$image_details;
+            return $outputDetails;
         } catch (\Exception $ex) {
             unlink($this->tempFilePath);
-            return throw new \Exception($ex->getMessage(), 500);
+            return throw new \Exception($ex->getMessage());
+        }
+    }
+
+    private function makeTempFile($path)
+    {
+        try {
+
+            $file = new SplFileInfo($path);
+            $file_type = $file->getExtension();
+
+            $this->tempFilePath = tempnam(sys_get_temp_dir(), $file_type);
+            file_put_contents($this->tempFilePath, file_get_contents($path));
+
+            // if the path is invalid ------------------------------
+            if (!file_exists($this->tempFilePath)) {
+                return throw new \Exception("Invalid file path provided");
+            }
+
+            return true;
+        } catch (\Exception $ex) {
+            return throw new \Exception($ex->getMessage());
         }
     }
 
@@ -172,9 +210,27 @@ class PdfToImageService
         }
     }
 
-    public function getPageNumber()
+    private function makeDirectory(string $path)
     {
-        var_dump($this->pageNumber);
+        try {
+
+            $storagePath = Config::get('converter.pdf_to_image.storage_path')();
+
+            $paths = explode('/', $path);
+
+            foreach ($paths as $path) {
+                if (empty($path)) {
+                    continue;
+                }
+                $storagePath = $storagePath . '/' . $path;
+                if (!is_dir($storagePath) && !mkdir($storagePath, 0775, true)) {
+                    return throw new \Exception("Failed to create directory: {0}", $storagePath);
+                }
+            }
+
+            return $storagePath;
+        } catch (\Exception $ex) {
+            return throw new \Exception($ex->getMessage(), 500);
+        }
     }
 }
-
