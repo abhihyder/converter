@@ -5,15 +5,14 @@ This is a Laravel package that allows you to convert PDF files to images. The pa
 ## Requirements
 
 - PHP "^7.3|^8.0"
-- Imagick PHP extension
-- Enable the Imagick extension in your php.ini file by uncommenting or adding the following line:
+
+- Imagick PHP extension (Enable the Imagick extension in your php.ini file by uncommenting or adding the following line:)
 
 ```text
 extension=imagick
 ```
 
-- Ghostscript
-- Verify that Ghostscript is installed by running the following command:
+- Ghostscript (Verify that Ghostscript is installed by running the following command:)
 
 ```bash
 gs -v
