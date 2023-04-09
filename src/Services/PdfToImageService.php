@@ -74,13 +74,25 @@ class PdfToImageService
     public function setPage($pages)
     {
         try {
-            return  $this->setPageNumber($pages);
+            $this->setPageNumber($pages);
+            return  $this;
         } catch (\Exception $ex) {
             return throw new \Exception($ex->getMessage());
         }
     }
 
-    public function toDir(string $storageTo = '')
+    public function allPage()
+    {
+        try {
+            $this->pageNumber = range(1, $this->totalPage);
+            $this->maxLimit = null;
+            return $this;
+        } catch (\Exception $ex) {
+            return throw new \Exception($ex->getMessage());
+        }
+    }
+
+    public function toDir(string $storageTo)
     {
         try {
             $this->toDirectory = $this->makeDirectory($storageTo);
@@ -204,7 +216,7 @@ class PdfToImageService
             }
 
             $this->pageNumber = $index;
-            return $this;
+            return true;
         } else {
             return throw new \Exception('Invalid page format! Example: "1" or "1-9" or "1,5,7" or "1,7-9" etc.', 400);
         }

@@ -1,18 +1,20 @@
 ## About Converter
 
-This is a Laravel package that allows you to convert PDF files to images. The package uses Imagick PHP extension and GhostScript to convert PDF files to images.
+A Laravel package that allows you to convert PDF files to images. The package uses Imagick PHP extension and GhostScript to convert PDF files to images.
 
 ## Requirements
 
 - PHP "^7.3|^8.0"
 
-- Imagick PHP extension (Enable the Imagick extension in your php.ini file by uncommenting or adding the following line:)
+- Imagick PHP extension   
+Enable the Imagick extension in your php.ini file by uncommenting or adding the following line:
 
 ```text
 extension=imagick
 ```
 
-- Ghostscript (Verify that Ghostscript is installed by running the following command:)
+- Ghostscript   
+Verify that Ghostscript is installed by running the following command:
 
 ```bash
 gs -v
@@ -58,11 +60,11 @@ Here's an example of how to convert a PDF file to an image:
 use Hyder\Converter\Facades\PdfToImage;
 
 // Minimalistic
-PdfToImage::path('/path/to/file.pdf')
+$response = PdfToImage::path('/path/to/file.pdf')
     ->save();
 
 // Customize output
-PdfToImage::path('/path/to/file.pdf')
+$response = PdfToImage::path('/path/to/file.pdf')
     ->format('png')
     ->resolution(200)
     ->maxLimit(5)
@@ -96,11 +98,14 @@ This method sets a maximum limit for the number of pages to be converted. If the
 
 This method sets the pages of the PDF file that you want to convert. The pages can be specified as single page numbers (e.g. 1,2,3), a range of pages (e.g. 1-3), or a combination of both (e.g. 1,2,3-5). By default only first page will be converted.
 
-### toDir(string $storageTo = '')
+### allPage()
+This method is used to set all pages of the PDF file for conversion to images. It doesn't make any sense to use maxLimit() or setPage() when using allPage(). If you call these methods before allPage(), they will be ignored. 
+
+### toDir(string $storageTo)
 
 This method sets the directory where the converted images will be saved. If no directory is specified, the default directory will be used.
 
-### save(string $name = '')
+### save(string $name = "")
 
 This method converts the PDF file to an image and saves it to the specified directory. If no name is specified, the image will be saved with a default name.
 
