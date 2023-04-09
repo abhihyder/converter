@@ -1,6 +1,6 @@
 {
     "name": "hyder/converter",
-    "description": "This is a Laravel package that provides an easy-to-use interface to convert PDF files to images using the Imagick PHP extension.",
+    "description": "A Laravel package that provides an easy-to-use interface to convert PDF files to images using the Imagick PHP extension.",
     "keywords": [
         "pdf-to-image",
         "image-to-pdf",
