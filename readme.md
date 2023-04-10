@@ -111,7 +111,7 @@ This method converts the PDF file to an image and saves it to the specified dire
 
 ## Error Handling
 
-After enable imagick you may get an error in live service. ImageMagick has some security policies disabling some rights for security reasons.
+After enable imagick you may get an error in live server. ImageMagick has some security policies disabling some rights for security reasons.
 You will have to edit a config file to re-enble the action you need.
 
 Open /etc/ImageMagick-6/policy.xml with your favorite text editor, find the line <policy domain="coder" rights="none" pattern="PDF" /> and replace "none" by "read|write"
@@ -140,6 +140,8 @@ You can [check Here](https://askubuntu.com/questions/1127260/imagemagick-convert
 
 Imagick
 
+## Contributing
+If you would like to contribute to this package, please create a pull request or open an issue.
 ## License
 
 The PDF to Image Converter package is open-source software licensed under the MIT license.
