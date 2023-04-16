@@ -32,7 +32,10 @@
             "providers": [
                 "Hyder\\Converter\\ConverterServiceProvider"
             ]
-        }
+        },
+        "files": [
+            "README.md"
+        ]
     },
     "minimum-stability": "stable",
     "prefer-stable": true
