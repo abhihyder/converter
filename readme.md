@@ -96,7 +96,7 @@ This method sets a maximum limit for the number of pages to be converted. If the
 
 ### setPage($pages)
 
-This method sets the pages of the PDF file that you want to convert. The pages can be specified as single page numbers (e.g. 1,2,3), a range of pages (e.g. 1-3), or a combination of both (e.g. 1,2,3-5). By default only first page will be converted.
+This method sets the pages of the PDF file that you want to convert. The pages can be specified as single page numbers (e.g. 1,2,3), a range of pages (e.g. 1-3), or a combination of both (e.g. 1,2,3-5). By default only the first page will be converted.
 
 ### allPage()
 This method is used to set all pages of the PDF file for conversion to images. It doesn't make any sense to use maxLimit() or setPage() when using allPage(). If you call these methods before allPage(), they will be ignored. 
@@ -107,12 +107,12 @@ This method sets the directory where the converted images will be saved. If no d
 
 ### save(string $name = "")
 
-This method converts the PDF file to an image and saves it to the specified directory. If no name is specified, the image will be saved with a default name.
+This method converts the PDF file to an image and saves it to the specified directory. If no name is specified, the image will be saved with a random name.
 
 ## Error Handling
 
-After enable imagick you may get an error in live server. ImageMagick has some security policies disabling some rights for security reasons.
-You will have to edit a config file to re-enble the action you need.
+After enabling imagick you may get an error in the live server. ImageMagick has some security policies disabling some rights for security reasons.
+You will have to edit a config file to re-enable the action you need.
 
 Open /etc/ImageMagick-6/policy.xml with your favorite text editor, find the line <policy domain="coder" rights="none" pattern="PDF" /> and replace "none" by "read|write"
 
