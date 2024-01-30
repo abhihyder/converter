@@ -245,4 +245,32 @@ class PdfToImageService
             return throw new \Exception($ex->getMessage(), 500);
         }
     }
+
+    // private function setPageNumber($index)
+    // {
+    //     $validFormat = preg_match("/^(\d+(-\d+)?)(,\d+(-\d+)?)*$/", $index);
+
+    //     if (!$validFormat) {
+    //         throw new \Exception('Invalid page format! Example: "1" or "1-9" or "1,5,7" or "1,7-9" etc.', 400);
+    //     }
+
+    //     $index = collect(explode(',', $index))
+    //         ->flatMap(function ($page) {
+    //             if (str_contains($page, '-')) {
+    //                 return range(...explode('-', $page));
+    //             }
+    //             return intval($page);
+    //         })
+    //         ->filter()
+    //         ->unique()
+    //         ->sort()
+    //         ->all();
+
+    //     if (max($index) > $this->totalPage) {
+    //         throw new \Exception("Page number greater than total number of pages ($this->totalPage).", 400);
+    //     }
+
+    //     $this->pageNumber = $index;
+    // }
+
 }
